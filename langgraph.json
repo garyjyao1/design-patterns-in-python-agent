@@ -1,0 +1,7 @@
+{
+  "$schema": "https://langgra.ph/schema.json",
+  "dependencies": ["."],
+  "graphs": {
+    "retrieval_graph": "./src/retrieval_graph/graph.py:graph"
+  }
+}

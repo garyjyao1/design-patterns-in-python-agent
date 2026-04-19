@@ -1,0 +1,29 @@
+[project]
+name = "design-patterns-in-python-agent"
+version = "0.1.0"
+description = "Retrieval-based QA agent for design patterns in python"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "langchain-core>=0.3.0",
+  "langgraph>=0.2.0",
+  "langchain-openai>=0.2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0.0",
+]
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
