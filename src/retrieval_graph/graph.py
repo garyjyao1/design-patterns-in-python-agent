@@ -26,8 +26,8 @@ def retrieve(state: State) -> State:
 def respond(state: State) -> State:
     """Generate answer from retrieved context. Falls back without API key."""
     question = state.get("question", "")
-    docs = state.get("_docs", [])
-    context = "\n\n".join(docs)
+    doc_texts = state.get("_docs", [])
+    context = "\n\n".join(doc_texts)
 
     if os.getenv("OPENAI_API_KEY"):
         prompt = ChatPromptTemplate.from_messages(
@@ -47,7 +47,7 @@ def respond(state: State) -> State:
         response = model.invoke(prompt.format_messages(question=question, context=context))
         answer = str(getattr(response, "content", response))
     else:
-        snippets = "\n\n".join(docs[:2])
+        snippets = "\n\n".join(doc_texts[:2])
         answer = (
             "OPENAI_API_KEY is not set, so this response is extractive. "
             "Most relevant snippets:\n\n"

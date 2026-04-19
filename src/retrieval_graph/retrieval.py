@@ -23,7 +23,7 @@ GITHUB_ZIP_URL = (
 
 
 def _tokenize(text: str) -> set[str]:
-    return set(re.findall(r"[a-zA-Z_]{2,}", text.lower()))
+    return set(re.findall(r"[a-zA-Z0-9_]+", text.lower()))
 
 
 def _api_get_json(url: str) -> object:
@@ -56,9 +56,9 @@ def _chunk_text(text: str, chunk_size: int = 1200, overlap: int = 200) -> list[s
     while start < len(text):
         end = min(len(text), start + chunk_size)
         chunks.append(text[start:end])
-        start = max(0, end - overlap)
         if end >= len(text):
             break
+        start += max(1, chunk_size - overlap)
     return chunks
 
 
