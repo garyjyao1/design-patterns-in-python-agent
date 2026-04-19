@@ -9,4 +9,4 @@ class State(TypedDict, total=False):
     question: str
     answer: str
     sources: list[str]
-    _docs: list[str]
+    retrieved_docs: list[str]

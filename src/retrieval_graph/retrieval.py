@@ -51,6 +51,8 @@ def _iter_repo_files(path: str = "") -> list[dict]:
 def _chunk_text(text: str, chunk_size: int = 1200, overlap: int = 200) -> list[str]:
     if not text:
         return []
+    if chunk_size <= overlap:
+        raise ValueError("chunk_size must be greater than overlap")
     chunks: list[str] = []
     start = 0
     while start < len(text):
@@ -124,6 +126,8 @@ class SimpleKeywordRetriever:
             if score > 0:
                 scored.append((score, doc))
         scored.sort(key=lambda x: x[0], reverse=True)
+        if not scored:
+            return self.documents[:k]
         return [doc for _, doc in scored[:k]]
 
 

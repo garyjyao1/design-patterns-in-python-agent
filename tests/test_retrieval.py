@@ -16,3 +16,4 @@ def test_simple_keyword_retriever_returns_most_relevant_docs():
 
     assert len(docs) == 2
     assert "Singleton" in docs[0].page_content
+    assert "Observer" in docs[1].page_content

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+from functools import lru_cache
 
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
@@ -12,6 +13,11 @@ from retrieval_graph.retrieval import get_default_retriever
 from retrieval_graph.state import State
 
 
+@lru_cache(maxsize=1)
+def _get_chat_model() -> ChatOpenAI:
+    return ChatOpenAI(model="gpt-4o-mini", temperature=0)
+
+
 def retrieve(state: State) -> State:
     """Retrieve relevant chunks for the incoming question."""
     question = state.get("question", "")
@@ -19,14 +25,14 @@ def retrieve(state: State) -> State:
     return {
         "question": question,
         "sources": [doc.metadata.get("source", "") for doc in docs],
-        "_docs": [doc.page_content for doc in docs],
+        "retrieved_docs": [doc.page_content for doc in docs],
     }
 
 
 def respond(state: State) -> State:
     """Generate answer from retrieved context. Falls back without API key."""
     question = state.get("question", "")
-    doc_texts = state.get("_docs", [])
+    doc_texts = state.get("retrieved_docs", [])
     context = "\n\n".join(doc_texts)
 
     if os.getenv("OPENAI_API_KEY"):
@@ -43,7 +49,7 @@ def respond(state: State) -> State:
                 ),
             ]
         )
-        model = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+        model = _get_chat_model()
         response = model.invoke(prompt.format_messages(question=question, context=context))
         answer = str(getattr(response, "content", response))
     else:
