@@ -7,6 +7,7 @@ import re
 from io import BytesIO
 from dataclasses import dataclass
 from functools import lru_cache
+from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 from zipfile import ZipFile
 
@@ -55,9 +56,9 @@ def _chunk_text(text: str, chunk_size: int = 1200, overlap: int = 200) -> list[s
     while start < len(text):
         end = min(len(text), start + chunk_size)
         chunks.append(text[start:end])
+        start = max(0, end - overlap)
         if end >= len(text):
             break
-        start = max(0, end - overlap)
     return chunks
 
 
@@ -86,7 +87,7 @@ def load_documents() -> list[Document]:
                             },
                         )
                     )
-    except Exception:
+    except (HTTPError, URLError, TimeoutError):
         for item in _iter_repo_files():
             download_url = item.get("download_url")
             path = item.get("path", "")

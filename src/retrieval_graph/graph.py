@@ -44,7 +44,8 @@ def respond(state: State) -> State:
             ]
         )
         model = ChatOpenAI(model="gpt-4o-mini", temperature=0)
-        answer = model.invoke(prompt.format_messages(question=question, context=context)).content
+        response = model.invoke(prompt.format_messages(question=question, context=context))
+        answer = str(getattr(response, "content", response))
     else:
         snippets = "\n\n".join(docs[:2])
         answer = (
