@@ -51,7 +51,10 @@ def respond(state: State) -> State:
         )
         model = _get_chat_model()
         response = model.invoke(prompt.format_messages(question=question, context=context))
-        answer = str(getattr(response, "content", response))
+        if hasattr(response, "content"):
+            answer = str(response.content)
+        else:
+            answer = str(response)
     else:
         snippets = "\n\n".join(doc_texts[:2])
         answer = (
