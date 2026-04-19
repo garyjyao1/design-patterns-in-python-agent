@@ -1,3 +1,15 @@
+Metadata-Version: 2.4
+Name: design-patterns-in-python-agent
+Version: 0.1.0
+Summary: Retrieval-based QA agent for design patterns in python
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: langchain-core>=0.3.0
+Requires-Dist: langgraph>=0.2.0
+Requires-Dist: langchain-openai>=0.2.0
+Provides-Extra: dev
+Requires-Dist: pytest>=8.0.0; extra == "dev"
+
 # design-patterns-in-python-agent
 
 Retrieval-based question answering agent built from the LangChain retrieval-agent template pattern.
